@@ -1,0 +1,77 @@
+name: RL Scan
+
+on:
+  workflow_dispatch:
+
+env:
+  REPORT_PATH: "RLreport"
+
+jobs:
+  Build-And-Scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out repository under $GITHUB_WORKSPACE, so job can access it
+      - name: Check out
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Set Current Date Time
+        run: |
+          echo "DT_NOW=$(date +%Y%m%d-%H%M%S)" >> ${GITHUB_ENV}
+
+      - name: Set up Java
+        uses: actions/setup-java@5ffc13f4174014e2d4d4572b3d74c3fa61aeb2c2 # v3.11.0
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+          cache: 'maven'
+
+      - name: Build
+        run: |
+          mvn -B clean package
+
+      - name: RL scan
+        continue-on-error: true # Remove this line if you want the overall run to fail when the scan detects policy violations
+        env:
+          RL_LIC: ${{ secrets.RL_LIC_KEY }}
+          RL_SITE: ${{ secrets.RL_SITE_KEY }}
+          RLSECURE_PATH: "./RLSecure"
+          PACKAGE_URL: "Apache/struts2-showcase@2.5.28"
+        run: |
+          # prepare to install
+          python -m pip install --upgrade pip
+          pip install rl-deploy
+          rl-deploy --version
+          mkdir -p ${RLSECURE_PATH} ./${REPORT_PATH}
+          # install rl-secure
+          rl-deploy install ${RLSECURE_PATH} \
+            --encoded-key="${RL_LIC}" \
+            --site-key="${RL_SITE}" \
+            --no-tracking
+          ${RLSECURE_PATH}/rl-secure init \
+            -s ${RLSECURE_PATH}
+          # scan the artifact
+          ${RLSECURE_PATH}/rl-secure scan ./target/struts2-showcase.war \
+            -s ${RLSECURE_PATH} \
+            -p ${PACKAGE_URL} \
+            --keep-reference \
+            --no-tracking
+          # make the report
+          ${RLSECURE_PATH}/rl-secure report \
+            -s ${RLSECURE_PATH} \
+            -p ${PACKAGE_URL} \
+            --format all \
+            --output-path ./${REPORT_PATH}
+          # report status and exit code
+          ${RLSECURE_PATH}/rl-secure status \
+            -s ${RLSECURE_PATH} \
+            -p ${PACKAGE_URL} \
+            --return-status
+
+      - name: Archive Report
+        if: success() || failure()
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: ReversingLabs-report-${{ env.DT_NOW }}
+          path: ${{ env.REPORT_PATH }}
+
