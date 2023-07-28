@@ -15,7 +15,7 @@ The following examples are provided in the `.github/workflows` directory:
 - **rl-scan-docker-self-hosted.yml**
 
 
-All examples require that you create the `RL_LIC_KEY` and `RL_SITE_KEY` secrets to store your ReversingLabs [license and site key](https://docs.secure.software/cli/deployment/rl-deploy-quick-start#prepare-the-license-and-site-key).
+All examples require that you create the `RLSECURE_ENCODED_LICENSE` and `RLSECURE_SITE_KEY` secrets to store your ReversingLabs [license and site key](https://docs.secure.software/cli/deployment/rl-deploy-quick-start#prepare-the-license-and-site-key).
 You can define the secrets either in your GitHub repository or in the GitHub organization settings.
 
 

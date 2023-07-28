@@ -34,8 +34,8 @@ jobs:
         continue-on-error: true # Remove this line if you want the overall run to fail when the scan detects policy violations
 
         env:
-          RL_LIC: ${{ secrets.RL_LIC_KEY }}
-          RL_SITE: ${{ secrets.RL_SITE_KEY }}
+          RLSECURE_ENCODED_LICENSE: ${{ secrets.RLSECURE_ENCODED_LICENSE }}
+          RLSECURE_SITE_KEY: ${{ secrets.RLSECURE_SITE_KEY }}
 
         run: |
           mkdir $(pwd)/${REPORT_PATH}
@@ -43,8 +43,8 @@ jobs:
             -u $(id -u):$(id -g) \
             -v "$(pwd)/target:/packages:ro" \
             -v "$(pwd)/${REPORT_PATH}:/report" \
-            -e RLSECURE_ENCODED_LICENSE="${RL_LIC}" \
-            -e RLSECURE_SITE_KEY="${RL_SITE}" \
+            -e RLSECURE_ENCODED_LICENSE="${RLSECURE_ENCODED_LICENSE}" \
+            -e RLSECURE_SITE_KEY="${RLSECURE_SITE_KEY}" \
             reversinglabs/rl-scanner \
               rl-scan \
                 --package-path=/packages/struts2-showcase.war \

@@ -33,9 +33,10 @@ jobs:
       - name: RL scan
         continue-on-error: true # Remove this line if you want the overall run to fail when the scan detects policy violations
         id: scan
+
         env:
-          RLSECURE_ENCODED_LICENSE: ${{ secrets.RL_LIC_KEY }}
-          RLSECURE_SITE_KEY: ${{ secrets.RL_SITE_KEY }}
+          RLSECURE_ENCODED_LICENSE: ${{ secrets.RLSECURE_ENCODED_LICENSE }}
+          RLSECURE_SITE_KEY: ${{ secrets.RLSECURE_SITE_KEY }}
 
         uses: reversinglabs/gh-action-rl-scanner-only@v1
         with:
