@@ -1,8 +1,8 @@
 # ReversingLabs rl-secure GitHub Actions Examples
 
-This repository contains working examples of GitHub workflows to illustrate scanning with the [ReversingLabs secure.software CLI](https://docs.secure.software/cli/).
+This repository contains working examples of GitHub workflows to illustrate scanning with the [ReversingLabs Spectra Assure CLI](https://docs.secure.software/cli/).
 
-ReversingLabs secure.software CLI is capable of scanning [nearly any type](https://docs.secure.software/concepts/language-coverage) of software artifact or package that results from a build.
+ReversingLabs Spectra Assure CLI is capable of scanning [nearly any type](https://docs.secure.software/concepts/language-coverage) of software artifact or package that results from a build.
 
 In these examples, we're using the source code and Maven build instructions for the Struts2 showcase web app,
 which came with [Apache Struts v2.5.28](https://archive.apache.org/dist/struts/2.5.28/).
@@ -47,5 +47,5 @@ This workflow shows how to use the **[reversinglabs/gh-action-rl-scanner-only](h
 
 This workflow verifies that the [ReversingLabs rl-scanner Docker image](https://hub.docker.com/r/reversinglabs/rl-scanner) can run with a self-hosted runner.
 
-In particular you have to verify what versions of local actions are supported by your version of GitHub Enterprise.
+In particular, you have to verify what versions of local actions are supported by your version of GitHub Enterprise.
 
