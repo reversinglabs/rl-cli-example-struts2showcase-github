@@ -11,9 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out
-        uses: actions/checkout@4.1.1
-
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
 
       - name: Set Current Date Time
         run: |
